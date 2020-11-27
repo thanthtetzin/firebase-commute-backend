@@ -8,7 +8,10 @@ exports.getSearchCollectionQuery = queryParams => {
   if (!queryParams) {
     return null;
   }
-  queryParams = JSON.parse(queryParams);
+  if(typeof queryParams === 'string'){
+    queryParams = JSON.parse(queryParams);
+  }
+  
   if (!queryParams.collectionName) {
     return null;
   }

@@ -47,8 +47,13 @@ app.get('/orders', async (req, res) => {
 });
 
 app.get('/documents', async(req, res) => {
-  const documents = await searchDocuments(req.query.searchParams);
-  res.json(documents);
+  try{
+    const documents = await searchDocuments(req.query.searchParams);
+    res.json(documents);
+  }catch(error){
+    console.log(error.message);
+  }
+  
 });
 
 function checkAuth(req, res, next) {
