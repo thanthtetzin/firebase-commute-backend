@@ -7,3 +7,6 @@ admin.initializeApp({
 exports.firestoreDb = () => {
   return admin.firestore();
 };
+exports.firestoreFilePathDocId = () => {
+  return admin.firestore.FieldPath.documentId()
+};

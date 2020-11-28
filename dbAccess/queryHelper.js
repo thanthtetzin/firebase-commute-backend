@@ -1,7 +1,9 @@
-const {firestoreDb} = require('./firestore');
+const {firestoreDb, firestoreFilePathDocId} = require('./firestore');
 
 exports.getDocumentRef = (collectionName, docId) => {
   const documentRef = firestoreDb().collection(collectionName).doc(docId);
+  //const documentRef = firestoreDb().collection(collectionName).where(firestoreFilePathDocId() ,'==', docId);
+  
   return documentRef;
 }
 exports.getSearchCollectionQuery = queryParams => {
@@ -27,6 +29,9 @@ exports.getSearchCollectionQuery = queryParams => {
   const orderBy = queryParams.orderBy;
   if(orderBy && orderBy.fieldName && orderBy.direction){
     query = query.orderBy(orderBy.fieldName, orderBy.direction)
+  }
+  if(queryParams.startAt){
+    query = query.startAt(queryParams.startAt);
   }
   if(queryParams.startAfter){
     query = query.startAfter(queryParams.startAfter);

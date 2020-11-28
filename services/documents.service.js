@@ -6,7 +6,8 @@ const getDocument = exports.getDocument = async (collectionName, docId) => {
   if (!doc.exists) {
     return null;
   } else {
-    return doc.data();
+    console.log(doc.data())
+    //return doc.data();
   }
 }
 exports.searchDocuments = async searchParams => {
@@ -34,10 +35,31 @@ const replaceStartAfterWithActualDoc = async (searchParams) => {
   if (!searchParams.collectionName) {
     return;
   }
-  if(searchParams.lastItemInRows){
-    const docRef = getDocumentRef(searchParams.collectionName, searchParams.lastItemInRows);
+  if(searchParams.startAfter){
+    console.log(searchParams.startAfter)
+    const docRef = getDocumentRef(searchParams.collectionName, searchParams.startAfter);
     const doc = await docRef.get();
-    searchParams.startAfter = doc;
+    // console.log(doc.exists)
+    if (doc.exists) {
+      console.log(doc.data())
+      searchParams.startAfter = doc;
+
+      if(searchParams.startAt){
+        delete searchParams.startAt;
+      }
+    } else{
+      return;
+    } 
+    
+  }
+  if(searchParams.startAt){
+    const docRef = getDocumentRef(searchParams.collectionName, searchParams.startAt);
+    const doc = await docRef.get();
+    searchParams.startAt = doc;
+
+    if(searchParams.startAfter){
+      delete searchParams.startAfter;
+    }
   }
   return searchParams;
 }
