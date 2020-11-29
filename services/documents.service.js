@@ -17,10 +17,9 @@ exports.searchDocuments = async searchParams => {
   const documentsResult = await query.get();
   const docs = [];
   documentsResult.forEach(doc => {
-    const docToPut = {
-      uid: doc.id,
-      ...doc.data()
-    }
+    console.log('Hi ' ,doc.id, doc.data().title)
+    const docToPut = doc.data();
+    docToPut.docId = doc.id;
     
     docs.push(docToPut);
   });
