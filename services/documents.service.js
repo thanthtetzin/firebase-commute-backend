@@ -11,7 +11,7 @@ const getDocument = exports.getDocument = async (collectionName, docId) => {
   }
 }
 exports.searchDocuments = async searchParams => {
-  searchParams = await replaceStartAfterWithActualDoc(searchParams);
+  searchParams = await replaceStartAfterStartAtWithActualDoc(searchParams);
   const query = getSearchCollectionQuery(searchParams);
   //console.log(query);
   const documentsResult = await query.get();
@@ -27,7 +27,7 @@ exports.searchDocuments = async searchParams => {
   return docs || null;
 }
 
-const replaceStartAfterWithActualDoc = async (searchParams) => {
+const replaceStartAfterStartAtWithActualDoc = async (searchParams) => {
   if (!searchParams) {
     return;
   }
@@ -37,29 +37,44 @@ const replaceStartAfterWithActualDoc = async (searchParams) => {
   }
   if(searchParams.startAfter){
     console.log(searchParams.startAfter)
-    const docRef = getDocumentRef(searchParams.collectionName, searchParams.startAfter);
-    const doc = await docRef.get();
-    // console.log(doc.exists)
-    if (doc.exists) {
-      console.log(doc.data())
+    const doc = await getDocByDocIdAndApplyMockSortKeyValIfNotFound(searchParams.collectionName, searchParams.startAfter, searchParams.orderBy);
+    if(doc){
       searchParams.startAfter = doc;
-
       if(searchParams.startAt){
         delete searchParams.startAt;
       }
-    } else{
+    }
+    else{
       return;
     } 
-    
   }
   if(searchParams.startAt){
-    const docRef = getDocumentRef(searchParams.collectionName, searchParams.startAt);
-    const doc = await docRef.get();
-    searchParams.startAt = doc;
-
-    if(searchParams.startAfter){
-      delete searchParams.startAfter;
+    const doc = await getDocByDocIdAndApplyMockSortKeyValIfNotFound(searchParams.collectionName, searchParams.startAt, searchParams.orderBy);
+    if(doc){
+      searchParams.startAt = doc;
+      if(searchParams.startAfter){
+        delete searchParams.startAfter;
+      }
+    }
+    else{
+      return;
     }
   }
+
   return searchParams;
+}
+
+const getDocByDocIdAndApplyMockSortKeyValIfNotFound = async (collectionName, docId, orderBy) => {
+  const docRef = getDocumentRef(collectionName, docId);
+  const doc = await docRef.get();
+  
+  if (doc.exists) {
+    if(!doc._fieldsProto[orderBy.fieldName]) {
+      doc._fieldsProto[orderBy.fieldName] = orderBy.mockValueIfNotFoundInDoc;
+    }
+    return doc;
+  } 
+  else{
+    return null;
+  } 
 }
