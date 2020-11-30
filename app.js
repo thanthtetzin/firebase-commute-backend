@@ -13,22 +13,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send(err.message);
 })
 
-app.get('/doc/:collectionName/:docId', async (req, res) => {
-  const doc = await getDocument(req.params.collectionName, req.params.docId);
-  res.json(doc);
-})
-app.get('/orders', async (req, res) => {  
-  const ordersRef = db.collection('orders');
-  const snapshot = await ordersRef.get();
-  const orders = [];
-  snapshot.forEach(doc => {
-    orders.push(doc.data());
-  });
-  res.json({
-    data: orders || null
-  })
-});
-
 app.get('/documents', async(req, res) => {
   try{
     const documents = await searchDocuments(req.query.searchParams);
@@ -36,8 +20,18 @@ app.get('/documents', async(req, res) => {
   }catch(error){
     console.log(error.message);
   }
+});
+app.get('/documents/:collectionName/:docId', async (req, res) => {
+  const doc = await getDocument(req.params.collectionName, req.params.docId);
+  res.json(doc);
+})
+app.put('/documents/:collectionName/:docId', async (req, res) => {  
   
 });
+app.post('/documents/:collectionName', async (req, res) => {  
+  
+});
+
 
 function checkAuth(req, res, next) {
   if (req.headers.authtoken) {

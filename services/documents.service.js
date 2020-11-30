@@ -13,11 +13,9 @@ const getDocument = exports.getDocument = async (collectionName, docId) => {
 exports.searchDocuments = async searchParams => {
   searchParams = await replaceStartAfterStartAtWithActualDoc(searchParams);
   const query = getSearchCollectionQuery(searchParams);
-  //console.log(query);
   const documentsResult = await query.get();
   const docs = [];
   documentsResult.forEach(doc => {
-    console.log('Hi ' ,doc.id, doc.data().title)
     const docToPut = doc.data();
     docToPut.docId = doc.id;
     
@@ -35,7 +33,6 @@ const replaceStartAfterStartAtWithActualDoc = async (searchParams) => {
     return;
   }
   if(searchParams.startAfter){
-    console.log(searchParams.startAfter)
     const doc = await getDocByDocIdForPagination(searchParams.collectionName, searchParams.startAfter, searchParams.orderBy);
     if(doc){
       searchParams.startAfter = doc;
