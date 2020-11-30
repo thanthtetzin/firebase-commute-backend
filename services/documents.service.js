@@ -1,4 +1,5 @@
 const {getSearchCollectionQuery, getDocumentRef} = require('../dbAccess/queryHelper');
+const {firestoreDb} = require('../dbAccess/firestore');
 
 const getDocument = exports.getDocument = async (collectionName, docId) => {
   const docRef = getDocumentRef(collectionName, docId);
@@ -10,6 +11,17 @@ const getDocument = exports.getDocument = async (collectionName, docId) => {
     return doc.data();
   }
 }
+
+exports.insertDocument = async (collectionName, dataToSave) => {
+  const res = await firestoreDb().collection(collectionName).add(dataToSave);
+  return res.id;
+}
+
+exports.updateDocument = async (collectionName, docId, dataToUpdate) => {
+  const docRef = getDocumentRef(collectionName, docId);
+  return await docRef.update(dataToUpdate);
+}
+
 exports.searchDocuments = async searchParams => {
   searchParams = await replaceStartAfterStartAtWithActualDoc(searchParams);
   const query = getSearchCollectionQuery(searchParams);
