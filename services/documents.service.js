@@ -40,7 +40,6 @@ const replaceStartAfterStartAtWithActualDoc = async (searchParams) => {
   if (!searchParams) {
     return;
   }
-  searchParams = JSON.parse(searchParams);
   if (!searchParams.collectionName) {
     return;
   }

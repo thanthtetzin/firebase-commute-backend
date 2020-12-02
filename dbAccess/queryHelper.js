@@ -19,7 +19,7 @@ exports.getSearchCollectionQuery = queryParams => {
   }
 
   let query = firestoreDb().collection(queryParams.collectionName);
-  if (queryParams.filters.length) {
+  if (queryParams.filters && queryParams.filters.length) {
     queryParams.filters.forEach(filter => {
       if (filter.fieldName && filter.comparisonOperator && filter.value) {
         query = query.where(filter.fieldName, filter.comparisonOperator, filter.value);
