@@ -14,4 +14,4 @@ This project is created with Express.js
 
 
 ## Testing the backend app
-- Run `npm test` to run the unit test by using **jest** and **supertest**
+- Run `npm test` to run the simple unit test.
