@@ -4,7 +4,7 @@ This project is created with Express.js
 
 ## Preparation before running the backend app
 - git clone this `firebase-commute-backend` repository
-- Copy `serviceAccountKey.json`file from coding challenge folder and paste inside the project directory
+- Copy `serviceAccountKey.json`file and paste inside the project directory
 - Run `npm install` at the project directory
 - After npm install, run this `export GOOGLE_APPLICATION_CREDENTIALS="./serviceAccountKey.json"`
 
