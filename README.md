@@ -1,6 +1,8 @@
 # firebase-commute-backend
 
-This project is created with Express.js. Node version **v12.19.0**
+This project is created with Express.js. 
+- Node version: **v12.19.0** 
+- NPM version: **6.14.8**
 
 ## Preparation before running the backend app
 - git clone this `firebase-commute-backend` repository
